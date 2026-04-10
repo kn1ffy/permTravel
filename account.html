@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход / Регистрация</title>
+
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+
+body {
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at 30% 30%, #1a3a1a, #0f2a0f);
+    position: relative;
+}
+
+.container {
+    width:100%;
+    max-width:400px;
+    background:rgba(0,0,0,0.7);
+    padding:2rem;
+    border-radius:20px;
+    border:1px solid rgba(255,215,0,0.4);
+    position: relative;
+}
+
+h2 {
+    text-align:center;
+    color:#ffdd99;
+    margin-bottom:1rem;
+}
+
+.tabs {
+    display:flex;
+    margin-bottom:1rem;
+}
+
+.tabs button {
+    flex:1;
+    padding:10px;
+    background:none;
+    border:none;
+    color:#c9b87a;
+    cursor:pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.tabs button:hover {
+    color: #ffdd99;
+}
+
+.tabs .active {
+    color:#ffdd99;
+    border-bottom:2px solid gold;
+}
+
+input {
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,255,255,0.1);
+    color:white;
+    font-size: 1rem;
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+input:focus {
+    outline: none;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,215,0,0.5);
+}
+
+.btn {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:linear-gradient(135deg,#b8860b,#9b6f0f);
+    border:none;
+    border-radius:20px;
+    color:white;
+    cursor:pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Кнопка возврата на главную */
+.back-home {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, rgba(184,134,11,0.9), rgba(155,111,15,0.9));
+    border: 1px solid rgba(255,215,0,0.6);
+    border-radius: 50px;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 0.9rem;
+}
+
+.back-home:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255,215,0,0.4);
+    border-color: rgba(255,215,0,0.9);
+}
+
+.back-home:active {
+    transform: translateY(0);
+}
+
+/* Чекбокс "Запомнить меня" */
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    color: #c9b87a;
+    font-size: 0.9rem;
+}
+
+.remember-me input {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #b8860b;
+}
+
+/* Красивая надпись */
+.invite-text {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,215,0,0.3);
+    font-size: 0.9rem;
+    color: #e6d5a8;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 5px rgba(255,215,0,0.3);
+    animation: gentleGlow 3s ease-in-out infinite;
+}
+
+@keyframes gentleGlow {
+    0% { text-shadow: 0 0 5px rgba(255,215,0,0.2); }
+    50% { text-shadow: 0 0 12px rgba(255,215,0,0.5); }
+    100% { text-shadow: 0 0 5px rgba(255,215,0,0.2); }
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 480px) {
+    .container {
+        margin: 20px;
+        padding: 1.5rem;
+    }
+    
+    .back-home {
+        bottom: 10px;
+        left: 10px;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+    
+    .tabs button {
+        font-size: 0.9rem;
+    }
+    
+    input {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .invite-text {
+        font-size: 0.8rem;
+        margin-top: 15px;
+        padding-top: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="tabs">
+        <button id="loginTab" class="active">Войти</button>
+        <button id="registerTab">Регистрация</button>
+    </div>
+
+    <h2 id="title">Вход</h2>
+
+    <form id="form">
+        <input type="text" id="fullname" placeholder="Имя (только регистрация)" style="display:none;">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Пароль" required>
+        <input type="password" id="repeatPassword" placeholder="Повтор пароля" style="display:none;">
+        
+        <div class="remember-me" id="rememberDiv" style="display: flex;">
+            <input type="checkbox" id="rememberCheckbox">
+            <label for="rememberCheckbox">Запомнить меня</label>
+        </div>
+        
+        <button class="btn" id="submitBtn">Продолжить</button>
+    </form>
+
+    <!-- Красивая приглашающая надпись -->
+    <div class="invite-text">
+        🌲 Приходите к нам и исследуйте Пермский край вместе с нами! 🏔️
+    </div>
+
+</div>
+
+<!-- Кнопка возврата на главную -->
+<button class="back-home" onclick="goHome()">
+    🏠 Вернуться на главную
+</button>
+
+<script>
+let isLogin = true;
+
+const loginTab = document.getElementById('loginTab');
+const registerTab = document.getElementById('registerTab');
+const title = document.getElementById('title');
+const fullname = document.getElementById('fullname');
+const repeatPassword = document.getElementById('repeatPassword');
+const rememberDiv = document.getElementById('rememberDiv');
+
+loginTab.onclick = () => {
+    isLogin = true;
+    title.textContent = 'Вход';
+    fullname.style.display = 'none';
+    repeatPassword.style.display = 'none';
+    rememberDiv.style.display = 'flex';
+    loginTab.classList.add('active');
+    registerTab.classList.remove('active');
+};
+
+registerTab.onclick = () => {
+    isLogin = false;
+    title.textContent = 'Регистрация';
+    fullname.style.display = 'block';
+    repeatPassword.style.display = 'block';
+    rememberDiv.style.display = 'none';
+    registerTab.classList.add('active');
+    loginTab.classList.remove('active');
+};
+
+// Функция сохранения сессии (запомнить меня)
+function saveSession(email, password, remember) {
+    if (remember) {
+        localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem('rememberedPassword', password);
+        localStorage.setItem('rememberMe', 'true');
+    } else {
+        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem('rememberedPassword');
+        localStorage.setItem('rememberMe', 'false');
+    }
+    localStorage.setItem('currentUserEmail', email);
+}
+
+// Функция загрузки сохраненных данных
+function loadSavedSession() {
+    const remember = localStorage.getItem('rememberMe');
+    if (remember === 'true') {
+        const savedEmail = localStorage.getItem('rememberedEmail');
+        const savedPassword = localStorage.getItem('rememberedPassword');
+        if (savedEmail && savedPassword) {
+            document.getElementById('email').value = savedEmail;
+            document.getElementById('password').value = savedPassword;
+            document.getElementById('rememberCheckbox').checked = true;
+        }
+    }
+}
+
+// Функция возврата на главную
+function goHome() {
+    window.location.href = 'index.html';
+}
+
+document.getElementById('form').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('rememberCheckbox').checked;
+
+    if (!isLogin) {
+        const name = fullname.value;
+        const repeat = repeatPassword.value;
+
+        if (!name.trim()) {
+            alert('❌ Введите имя');
+            return;
+        }
+
+        if (password !== repeat) {
+            alert('❌ Пароли не совпадают');
+            return;
+        }
+
+        if (password.length < 4) {
+            alert('❌ Пароль должен содержать минимум 4 символа');
+            return;
+        }
+
+        const existingUser = localStorage.getItem('user_' + email);
+        if (existingUser) {
+            alert('❌ Пользователь с таким email уже существует');
+            return;
+        }
+
+        const user = { fullname: name, email, password };
+        localStorage.setItem('user_' + email, JSON.stringify(user));
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        saveSession(email, password, remember);
+        
+        alert('✅ Регистрация успешна');
+        window.location.href = 'profile.html';
+    } else {
+        const saved = JSON.parse(localStorage.getItem('user_' + email));
+        
+        if (!saved || saved.password !== password) {
+            alert('❌ Неверный email или пароль');
+            return;
+        }
+        
+        localStorage.setItem('currentUser', JSON.stringify(saved));
+        saveSession(email, password, remember);
+        
+        alert('✅ Вход выполнен');
+        window.location.href = 'profile.html';
+    }
+});
+
+loadSavedSession();
+
+const currentUser = localStorage.getItem('currentUser');
+if (currentUser && window.location.pathname !== '/profile.html') {
+    console.log('Пользователь уже авторизован');
+}
+</script>
+
+</body>
+</html>

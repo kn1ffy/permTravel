@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>🏔️ PermTravel| Пермский край</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Poppins', 'Georgia', serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            /* СТАТИЧНЫЙ ГРАДИЕНТ - БЕЗ АНИМАЦИИ */
+            background: radial-gradient(circle at 20% 30%, #1a3a1a, #0f2a0f, #051505);
+        }
+
+        /* Золотые частицы - оставляем для эстетики */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.08), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            animation: particles 8s ease-in-out infinite;
+        }
+
+        @keyframes particles {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.02); }
+        }
+
+        /* ШАПКА */
+        header {
+            background: rgba(5, 15, 5, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .header-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            color: #ffdd99;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .logo p {
+            font-size: 0.65rem;
+            color: #c9b87a;
+        }
+
+        /* БУТЕРБРОД КНОПКА - ВСЕГДА ВИДИМА НА МОБИЛЬНЫХ */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 201;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: #ffdd99;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* МЕНЮ - ДЛЯ ДЕСКТОПА */
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-menu a {
+            color: #ffdd99;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .nav-menu a:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* КОНТЕЙНЕР */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ГЕРОЙ */
+        .hero {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            margin-bottom: 3rem;
+        }
+        .hero h2 {
+            font-size: 2.2rem;
+            color: #ffdd99;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .hero p {
+            font-size: 1rem;
+            color: #d4c88c;
+            margin-top: 0.5rem;
+        }
+
+        /* ГАЛЕРЕЯ */
+        .gallery-title {
+            text-align: center;
+            margin: 3rem 0 2rem;
+        }
+        .gallery-title h2 {
+            font-size: 1.8rem;
+            color: #ffdd99;
+        }
+        .gallery-title p {
+            color: #c9b87a;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+        .gallery-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+        }
+        .gallery-info {
+            padding: 1.2rem;
+        }
+        .gallery-info h3 {
+            color: #ffdd99;
+            margin-bottom: 0.5rem;
+        }
+        .gallery-info p {
+            color: #c9b87a;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* ПРЕИМУЩЕСТВА */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        .feature-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 215, 0, 0.7);
+        }
+        .feature-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+        }
+        .feature-card h3 {
+            color: #ffdd99;
+            margin-bottom: 0.5rem;
+        }
+        .feature-card p {
+            color: #c9b87a;
+            font-size: 0.85rem;
+        }
+
+        /* О НАС */
+        .about {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
+        .about h2 {
+            color: #ffdd99;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+        .about p {
+            color: #d4c88c;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 28px;
+            background: linear-gradient(135deg, #b8860b, #9b6f0f);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            text-align: center;
+            padding: 1.5rem;
+            color: #ffdd99;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        /* ========== АДАПТАЦИЯ ДЛЯ ANDROID/МОБИЛЬНЫХ ========== */
+        @media (max-width: 768px) {
+            /* ПОКАЗЫВАЕМ БУТЕРБРОД */
+            .hamburger {
+                display: flex;
+            }
+            
+            /* МЕНЮ СКРЫТО ПО УМОЛЧАНИЮ */
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                gap: 1.5rem;
+                padding: 2rem 1.5rem;
+                margin: 0;
+                z-index: 150;
+                transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                border-right: 2px solid rgba(255, 215, 0, 0.5);
+                box-shadow: 5px 0 30px rgba(0,0,0,0.5);
+            }
+            
+            /* МЕНЮ ОТКРЫТО */
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-menu a {
+                width: 100%;
+                text-align: center;
+                padding: 0.8rem;
+                font-size: 1.1rem;
+                background: rgba(0, 0, 0, 0.6);
+            }
+            
+            /* Затемнение фона при открытом меню */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 140;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .hero {
+                padding: 2rem 1rem;
+            }
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+            .gallery-title h2 {
+                font-size: 1.4rem;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .about h2 {
+                font-size: 1.3rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 1.3rem;
+            }
+            .logo h1 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ОВЕРЛЕЙ ДЛЯ ЗАТЕМНЕНИЯ ПРИ ОТКРЫТОМ МЕНЮ -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>🏔️ PermTravel</h1>
+                <p>Пермский край • Уральская природа</p>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-menu" id="navMenu">
+                <a href="profile.html">🏠 Профиль</a>
+                <a href="hotels.html">🏨 Все отели</a>
+                <a href="account.html">👤 Регистрация</a>
+                <a href="payment.html">💳 NFC билеты</a>
+                <a href="reviews.html">💬 Отзывы</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>✨ Откройте Пермский край ✨</h2>
+            <p>Уральская природа, легендарные места и комфортный отдых</p>
+        </div>
+
+        <div class="gallery-title">
+            <h2>🏔️ Жемчужины Пермского края</h2>
+            <p>Уникальные места, которые стоит увидеть</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-card">
+                <div class="gallery-image" style="background-image: url('images/rekaa.jpeg');"></div>
+                <div class="gallery-info">
+                    <h3>Река Чусовая</h3>
+                    <p>Легендарная уральская река, воспетая в сказах Бажова. Живописные скалы, чистейшая вода.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-image" style="background-image: url('images/camen.jpg');"></div>
+                <div class="gallery-info">
+                    <h3>Каменный город</h3>
+                    <p>Удивительный скальный массив с живописными ущельями и каменными грядами.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-image" style="background-image: url('images/kungurskaya-peshera11.jpg');"></div>
+                <div class="gallery-info">
+                    <h3>Кунгурская пещера</h3>
+                    <p>Одна из крупнейших карстовых пещер в мире. Ледяные гроты и подземные озера.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-image" style="background-image: url('images/orig.jpg');"></div>
+                <div class="gallery-info">
+                    <h3>Уральские горы</h3>
+                    <p>Величественные горные хребты, живописные перевалы и захватывающие панорамы.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-image" style="background-image: url('images/gorra.jpg');"></div>
+                <div class="gallery-info">
+                    <h3>Горнолыжные курорты</h3>
+                    <p>Современные трассы, комфортные подъемники и великолепные виды.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-image" style="background-image: url('images/3b2c5bes-1920.jpg');"></div>
+                <div class="gallery-info">
+                    <h3>Ледяная гора</h3>
+                    <p>Уникальный природный феномен в Кунгуре. Многолетние ледяные гроты.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-title">
+            <h2>🌟 Наши преимущества</h2>
+            <p>Всё для вашего комфортного отдыха</p>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📱💳</div>
+                <h3>NFC Оплата</h3>
+                <p>Мгновенная оплата телефоном или картой</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏨</div>
+                <h3>Лучшие отели</h3>
+                <p>Номера от эконом до премиум класса</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎁</div>
+                <h3>Бонусная программа</h3>
+                <p>Скидки до 20% постоянным гостям</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚐</div>
+                <h3>Бесплатный трансфер</h3>
+                <p>Встречаем от вокзала и аэропорта</p>
+            </div>
+        </div>
+
+        <div class="about">
+            <h2>🏨 PermTravel — ваш гид по Пермскому краю</h2>
+            <p>Мы предлагаем не просто комфортабельные номера, а уникальную возможность познакомиться с богатейшей природой Урала. 
+            Наши отели расположены в самых живописных местах: от центра Перми до баз отдыха на берегу Чусовой, 
+            от горнолыжных курортов Губахи до знаменитой Кунгурской пещеры.</p>
+            <a href="hotels.html" class="btn">🏨 Выбрать отель →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>🏔️ PermTravel | Пермский край | Уральская природа</p>
+        <p>📞 +7 (342) 123-45-67 | 📧 info@hotel-zarya.ru</p>
+    </footer>
+
+    <script>
+        // ПОЛНОСТЬЮ РАБОТАЮЩЕЕ БУТЕРБРОД МЕНЮ
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function openMenu() {
+            hamburger.classList.add('active');
+            navMenu.classList.add('active');
+            if (menuOverlay) menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        if (hamburger) {
+            hamburger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (navMenu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+        }
+        
+        // Закрытие при клике на оверлей
+        if (menuOverlay) {
+            menuOverlay.addEventListener('click', closeMenu);
+        }
+        
+        // Закрытие при клике на ссылки в меню
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+        
+        // Закрытие при изменении ориентации экрана
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeMenu();
+            }
+        });
+        
+        // Проверка авторизованного пользователя
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const user = JSON.parse(currentUser);
+            console.log('👋 Добро пожаловать,', user.fullname);
+        }
+    </script>
+</body>
+</html>

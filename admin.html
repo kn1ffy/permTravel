@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="theme-color" content="#0f2a0f">
+    <title>Админ-панель - PermTravel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 30% 30%, #1a3a1a, #0f2a0f);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(5, 15, 5, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .header-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            color: #ffdd99;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .logo p {
+            font-size: 0.65rem;
+            color: #c9b87a;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-menu a {
+            color: #ffdd99;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .nav-menu a:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.8);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        .admin-header h1 {
+            font-size: 2rem;
+            color: #ffdd99;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .admin-header p {
+            color: #d4c88c;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 50px;
+            backdrop-filter: blur(8px);
+        }
+        .tab-btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #b8860b, #9b6f0f);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        .tab-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: #ffdd99;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .search-bar input:focus {
+            border-color: #b8860b;
+        }
+        .search-bar button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #b8860b, #9b6f0f);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ffdd99;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #b8860b;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #b8860b, #9b6f0f);
+            color: white;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #8b0000, #5a0000);
+            color: white;
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+        }
+        .btn-info {
+            background: linear-gradient(135deg, #2196f3, #0b7dda);
+            color: white;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .hotel-item, .user-item, .review-item, .booking-item, .discount-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .hotel-info, .user-info, .review-info, .booking-info, .discount-info {
+            flex: 1;
+        }
+        .hotel-name, .review-text, .discount-name {
+            font-weight: bold;
+            color: #ffdd99;
+            font-size: 1.1rem;
+        }
+        .hotel-details, .review-details, .booking-details, .discount-value {
+            font-size: 0.8rem;
+            color: #c9b87a;
+        }
+        .services-badge {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .service-tag {
+            background: rgba(255,215,0,0.2);
+            border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            color: #ffdd99;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .action-buttons button {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        .status-active {
+            background: #4caf50;
+            color: white;
+        }
+        .status-blocked {
+            background: #f44336;
+            color: white;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: #ffdd99;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 1100;
+            animation: fadeInUp 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        @keyframes fadeInUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .tabs { flex-direction: column; border-radius: 20px; }
+            .tab-btn { text-align: center; }
+            .form-row { flex-direction: column; }
+            .hotel-item, .user-item, .review-item, .discount-item { flex-direction: column; align-items: stretch; }
+            .action-buttons { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>🏔️ PermTravel</h1>
+            <p>Административная панель</p>
+        </div>
+        <div class="nav-menu">
+            <a href="index.html">🏠 Главная</a>
+            <a href="hotels.html">🏨 Отели</a>
+            <a href="profile.html">👤 Профиль</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="admin-header">
+        <h1>🔧 Панель администратора</h1>
+        <p>Управление отелями, пользователями, бронированиями и отзывами</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="hotels">🏨 Отели</button>
+        <button class="tab-btn" data-tab="users">👥 Пользователи</button>
+        <button class="tab-btn" data-tab="bookings">📅 Бронирования</button>
+        <button class="tab-btn" data-tab="reviews">💬 Отзывы</button>
+        <button class="tab-btn" data-tab="addHotel">➕ Добавить отель</button>
+        <button class="tab-btn" data-tab="discounts">🎁 Льготы</button>
+    </div>
+
+    <!-- Панель управления отелями -->
+    <div id="hotelsPanel" class="panel active">
+        <div class="card">
+            <div class="card-title">
+                <span>📋 Список отелей</span>
+                <div>
+                    <button class="btn btn-info" onclick="resetHotels()" style="margin-right: 10px;">🔄 Сбросить отели</button>
+                    <button class="btn btn-primary" onclick="exportHotelsData()">📥 Экспорт</button>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="hotelSearchInput" placeholder="🔍 Поиск по названию или городу...">
+                <button onclick="filterHotels()">Найти</button>
+            </div>
+            <div id="hotelsList" class="hotel-list"></div>
+        </div>
+    </div>
+
+    <!-- Панель управления пользователями -->
+    <div id="usersPanel" class="panel">
+        <div class="card">
+            <div class="card-title">
+                <span>👥 Все пользователи</span>
+                <button class="btn btn-primary" onclick="exportUsersData()">📥 Экспорт</button>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="userSearchInput" placeholder="🔍 Поиск по имени или email...">
+                <button onclick="filterUsers()">Найти</button>
+            </div>
+            <div id="usersList" class="user-list"></div>
+        </div>
+    </div>
+
+    <!-- Панель бронирований -->
+    <div id="bookingsPanel" class="panel">
+        <div class="card">
+            <div class="card-title">
+                <span>📅 Все бронирования</span>
+                <button class="btn btn-primary" onclick="exportBookingsData()">📥 Экспорт</button>
+            </div>
+            <div id="bookingsList" class="booking-list"></div>
+        </div>
+    </div>
+
+    <!-- Панель отзывов -->
+    <div id="reviewsPanel" class="panel">
+        <div class="card">
+            <div class="card-title">
+                <span>💬 Все отзывы</span>
+                <button class="btn btn-primary" onclick="exportReviewsData()">📥 Экспорт</button>
+            </div>
+            <div id="reviewsList" class="review-list"></div>
+        </div>
+    </div>
+
+    <!-- Панель добавления отеля -->
+    <div id="addHotelPanel" class="panel">
+        <div class="card">
+            <div class="card-title">➕ Добавить новый отель</div>
+            <form id="addHotelForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Название отеля *</label>
+                        <input type="text" id="hotelName" required placeholder="Гостиница «Название»">
+                    </div>
+                    <div class="form-group">
+                        <label>Класс *</label>
+                        <select id="hotelClass">
+                            <option value="econom">💰 Эконом</option>
+                            <option value="comfort">⭐ Комфорт</option>
+                            <option value="premium">👑 Премиум</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Адрес *</label>
+                    <input type="text" id="hotelLocation" required placeholder="Город, улица, дом">
+                </div>
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea id="hotelDesc" rows="3" placeholder="Краткое описание отеля..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Услуги (5 штук, через запятую)</label>
+                    <input type="text" id="hotelServices" placeholder="Услуга1, Услуга2, Услуга3, Услуга4, Услуга5">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Цена за ночь (₽) *</label>
+                        <input type="number" id="hotelPrice" required placeholder="2500">
+                    </div>
+                    <div class="form-group">
+                        <label>Количество номеров *</label>
+                        <input type="number" id="hotelRoomsCount" required placeholder="10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL изображения</label>
+                    <input type="text" id="hotelImage" placeholder="images/hotel.jpg">
+                </div>
+                <button type="submit" class="btn btn-primary">➕ Добавить отель</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Панель управления льготами -->
+    <div id="discountsPanel" class="panel">
+        <div class="card">
+            <div class="card-title">
+                <span>🎁 Льготные категории граждан</span>
+                <button class="btn btn-primary" onclick="exportDiscountsData()">📥 Экспорт</button>
+            </div>
+            <div id="discountsList" class="discounts-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- ЭТАЛОННЫЙ СПИСОК ВСЕХ 15 ОТЕЛЕЙ (ПОЛНЫЙ) ----------
+    const defaultHotels = [
+        { id: 1, name: "Гостиница «Урал»", class: "econom", location: "Пермь, ул. Ленина, 58", desc: "Уютная гостиница в центре Перми. Рядом вокзал и основные достопримечательности.", price: 2500, image: "images/ural.jpg", rooms: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112],
+          services: ["Бесплатный Wi-Fi", "Круглосуточная стойка", "Камера хранения", "Парковка", "Завтрак в номер"] },
+        { id: 2, name: "Отель «Прикамье»", class: "econom", location: "Пермь, шоссе Космонавтов, 162", desc: "Недорогой отель с базовыми удобствами. Отличный вариант для командировок.", price: 2200, image: "images/prim.jpg", rooms: [201, 202, 203, 204, 205, 206, 207, 208, 209, 210],
+          services: ["Бесплатный Wi-Fi", "Бизнес-центр", "Трансфер", "Автомат с напитками", "Гладильная комната"] },
+        { id: 3, name: "Гостевой дом «Pride»", class: "econom", location: "Березники, ул. Березовская, 12", desc: "Гостевой дом с домашней атмосферой. Чисто, уютно, есть кухня.", price: 1800, image: "images/pride.jpg", rooms: [301, 302, 303, 304, 305, 306, 307, 308],
+          services: ["Общая кухня", "Бесплатный чай/кофе", "Терраса", "Парковка", "Прогулка с гидом"] },
+        { id: 4, name: "Мини-отель «Спутник»", class: "econom", location: "Соликамск, ул. Северная, 45", desc: "Небольшой отель в тихом районе. Идеально для бюджетного размещения.", price: 1900, image: "images/sputnik.jpg", rooms: [401, 402, 403, 404, 405, 406, 407, 408],
+          services: ["Бесплатный Wi-Fi", "Кулер с водой", "Мини-кухня", "Трансфер до вокзала", "Сушка для одежды"] },
+        { id: 5, name: "Гостиница «Адам и Ева»", class: "econom", location: "Пермь, ул. Пушкарская, 100", desc: "Мини-отель недалеко от центра города.", price: 2300, image: "images/AE.jpg", rooms: [501, 502, 503, 504, 505, 506, 507, 508, 509, 510],
+          services: ["Бесплатный Wi-Fi", "Завтрак", "Камера хранения", "Парковка", "Утюг"] },
+        { id: 6, name: "Отель «Element»", class: "comfort", location: "Пермь, ул. Мира, 39", desc: "Комфортабельный отель с рестораном, сауной и тренажерным залом.", price: 4500, image: "images/element.jpg", rooms: [601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620],
+          services: ["Сауна", "Фитнес-зал", "Ресторан", "Бесплатный Wi-Fi", "Конференц-зал"] },
+        { id: 7, name: "Гостиница «Атриум»", class: "comfort", location: "Пермь, ул. Куйбышева, 68", desc: "Современный отель в центре Перми. Просторные номера, ресторан.", price: 4800, image: "images/atrium.jpg", rooms: [701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716],
+          services: ["Ресторан", "Бесплатный Wi-Fi", "Парковка", "Бизнес-центр", "Фитнес"] },
+        { id: 8, name: "Отель «Green Village»", class: "comfort", location: "Пермский р-н, д. Кондратово", desc: "Отель в экологически чистом районе. Банный комплекс.", price: 5200, image: "images/greemVil.jpg", rooms: [801, 802, 803, 804, 805, 806, 807, 808, 809, 810, 811, 812, 813, 814],
+          services: ["Банный комплекс", "Бесплатный Wi-Fi", "Парковка", "Пикник зона", "Прокат велосипедов"] },
+        { id: 9, name: "Отель «Сталагмит»", class: "comfort", location: "Кунгур, ул. Октябрьская, 15", desc: "Отель в центре Кунгура. Рядом Кунгурская пещера.", price: 3900, image: "images/kungur.jpg", rooms: [901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912],
+          services: ["Экскурсии в пещеру", "Бесплатный Wi-Fi", "Трансфер", "Камера хранения", "Завтрак"] },
+        { id: 10, name: "Гостиница «Чайковский Арт»", class: "comfort", location: "Чайковский, ул. Вокзальная, 18", desc: "Стильный отель с дизайнерскими номерами.", price: 4200, image: "images/Chaikovskii.jpg", rooms: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015],
+          services: ["Арт-пространство", "Бесплатный Wi-Fi", "Парковка", "Кофе-брейк", "Терраса"] },
+        { id: 11, name: "Hyatt Regency Perm", class: "premium", location: "Пермь, ул. Мира, 45", desc: "Пятизвездочный отель мирового уровня. Спа-центр, рестораны высокой кухни.", price: 12500, image: "images/hyatt.jpg", rooms: [1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118],
+          services: ["Спа-центр", "Фитнес", "Бассейн", "Ресторан", "Консьерж-сервис"] },
+        { id: 12, name: "Park Hotel «Пермский»", class: "premium", location: "Пермь, шоссе Космонавтов, 111", desc: "Престижный парк-отель с собственным парком. SPA, рестораны.", price: 9800, image: "images/permskyi.jpg", rooms: [1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216],
+          services: ["СПА", "Бассейн", "Парк", "Бесплатный Wi-Fi", "Ресторан"] },
+        { id: 13, name: "Отель «Белый Камень»", class: "premium", location: "Пермский р-н, д. Курашим", desc: "Роскошный загородный отель. Номера класса люкс, спа, бильярд.", price: 11200, image: "images/kamen.jpg", rooms: [1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312],
+          services: ["Бильярд", "СПА-комплекс", "Ресторан", "Конный двор", "Трансфер"] },
+        { id: 14, name: "Grand Hotel «Усьва»", class: "premium", location: "Гремячинский р-н, пос. Усьва", desc: "Премиальный отель у скалы Усьвинские Столбы. Роскошные номера.", price: 14500, image: "images/ysva.jpg", rooms: [1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414],
+          services: ["Вид на скалы", "СПА", "Ресторан", "Экскурсии", "Вертолётная площадка"] },
+        { id: 15, name: "Отель «Княжий двор»", class: "premium", location: "Пермь, ул. Монастырская, 12", desc: "Бутик-отель в историческом здании. Эксклюзивные номера.", price: 13500, image: "images/last.jpg", rooms: [1501, 1502, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510, 1511, 1512, 1513, 1514, 1515],
+          services: ["Исторический интерьер", "Ресторан", "Консьерж", "Парковка", "Бесплатный Wi-Fi"] }
+    ];
+
+    let hotels = [];
+    let hotelsFiltered = [];
+
+    // ---------- СКИДКИ (ЛЬГОТЫ) ----------
+    let discounts = {
+        pension: { name: "Пенсионеры", value: 15 },
+        disabled: { name: "Инвалиды", value: 20 },
+        svo: { name: "Участники СВО", value: 25 },
+        family: { name: "Многодетные семьи", value: 10 }
+    };
+
+    function loadDiscounts() {
+        const saved = localStorage.getItem('admin_discounts');
+        if (saved) {
+            try {
+                discounts = JSON.parse(saved);
+            } catch(e) {}
+        } else {
+            localStorage.setItem('admin_discounts', JSON.stringify(discounts));
+        }
+        displayDiscounts();
+    }
+
+    function saveDiscounts() {
+        localStorage.setItem('admin_discounts', JSON.stringify(discounts));
+    }
+
+    function editDiscount(type) {
+        const current = discounts[type].value;
+        const newVal = prompt(`Введите размер скидки для ${discounts[type].name} (в %):`, current);
+        if (newVal !== null && !isNaN(newVal) && newVal >= 0 && newVal <= 100) {
+            discounts[type].value = parseInt(newVal);
+            saveDiscounts();
+            displayDiscounts();
+            showToast(`✅ Скидка для ${discounts[type].name} изменена на ${newVal}%`);
+        } else if (newVal !== null) {
+            showToast('❌ Введите корректное значение от 0 до 100');
+        }
+    }
+
+    function displayDiscounts() {
+        const container = document.getElementById('discountsList');
+        if (!container) return;
+        container.innerHTML = Object.keys(discounts).map(key => `
+            <div class="discount-item">
+                <div class="discount-info">
+                    <div class="discount-name">${discounts[key].name}</div>
+                    <div class="discount-value">Текущая скидка: ${discounts[key].value}%</div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-warning" onclick="editDiscount('${key}')">✏️ Изменить</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function exportDiscountsData() {
+        const data = JSON.stringify(discounts, null, 2);
+        downloadFile('discounts_export.json', data);
+        showToast('📥 Скидки экспортированы');
+    }
+
+    // ---------- ФУНКЦИИ ДЛЯ ОТЕЛЕЙ ----------
+    function resetHotels() {
+        hotels = JSON.parse(JSON.stringify(defaultHotels));
+        saveHotels();
+        filterHotels();
+        showToast('✅ Список отелей восстановлен (15 отелей)');
+    }
+
+    function loadData() {
+        const savedHotels = localStorage.getItem('admin_hotels');
+        if (savedHotels) {
+            const parsed = JSON.parse(savedHotels);
+            if (!parsed || parsed.length < 15 || !parsed[0].services) {
+                hotels = JSON.parse(JSON.stringify(defaultHotels));
+                saveHotels();
+            } else {
+                hotels = parsed;
+            }
+        } else {
+            hotels = JSON.parse(JSON.stringify(defaultHotels));
+            saveHotels();
+        }
+        localStorage.setItem('hotels', JSON.stringify(hotels));
+        hotelsFiltered = [...hotels];
+    }
+
+    function saveHotels() {
+        localStorage.setItem('admin_hotels', JSON.stringify(hotels));
+        localStorage.setItem('hotels', JSON.stringify(hotels));
+        hotelsFiltered = [...hotels];
+    }
+
+    function getAllUsers() {
+        const usersList = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('user_')) {
+                try {
+                    const user = JSON.parse(localStorage.getItem(key));
+                    if (user && user.email) {
+                        const blocked = localStorage.getItem(`blocked_${user.email}`) === 'true';
+                        usersList.push({ ...user, blocked, key });
+                    }
+                } catch(e) {}
+            }
+        }
+        return usersList;
+    }
+
+    function getAllBookings() {
+        return JSON.parse(localStorage.getItem('bookings')) || [];
+    }
+
+    function getAllReviews() {
+        return JSON.parse(localStorage.getItem('reviews')) || [];
+    }
+
+    function filterHotels() {
+        const searchTerm = document.getElementById('hotelSearchInput').value.toLowerCase().trim();
+        if (!searchTerm) {
+            hotelsFiltered = [...hotels];
+        } else {
+            hotelsFiltered = hotels.filter(hotel => 
+                hotel.name.toLowerCase().includes(searchTerm) || 
+                hotel.location.toLowerCase().includes(searchTerm)
+            );
+        }
+        displayHotels();
+    }
+
+    function filterUsers() {
+        const searchTerm = document.getElementById('userSearchInput').value.toLowerCase().trim();
+        const allUsers = getAllUsers();
+        let filtered;
+        if (!searchTerm) {
+            filtered = [...allUsers];
+        } else {
+            filtered = allUsers.filter(user => 
+                (user.fullname || user.name || '').toLowerCase().includes(searchTerm) || 
+                user.email.toLowerCase().includes(searchTerm)
+            );
+        }
+        displayUsers(filtered);
+    }
+
+    function displayHotels() {
+        const container = document.getElementById('hotelsList');
+        if (!container) return;
+        if (hotelsFiltered.length === 0) {
+            container.innerHTML = '<div class="empty-state">📭 Нет отелей, соответствующих запросу</div>';
+            return;
+        }
+        container.innerHTML = hotelsFiltered.map(hotel => {
+            const classNames = { econom: '💰 Эконом', comfort: '⭐ Комфорт', premium: '👑 Премиум' };
+            const servicesHtml = hotel.services ? hotel.services.map(s => `<span class="service-tag">${escapeHtml(s)}</span>`).join('') : '';
+            return `
+                <div class="hotel-item">
+                    <div class="hotel-info">
+                        <div class="hotel-name">🏨 ${escapeHtml(hotel.name)}</div>
+                        <div class="hotel-details">${classNames[hotel.class]} • ${hotel.location}</div>
+                        <div class="hotel-details">💰 ${hotel.price.toLocaleString()} ₽/ночь • 🚪 ${hotel.rooms.length} номеров</div>
+                        <div class="services-badge">${servicesHtml}</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning" onclick="editHotel(${hotel.id})">✏️ Редактировать</button>
+                        <button class="btn btn-danger" onclick="deleteHotel(${hotel.id})">🗑 Удалить</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function displayUsers(usersToShow) {
+        const container = document.getElementById('usersList');
+        if (!container) return;
+        if (!usersToShow || usersToShow.length === 0) {
+            container.innerHTML = '<div class="empty-state">👤 Нет пользователей, соответствующих запросу</div>';
+            return;
+        }
+        container.innerHTML = usersToShow.map(user => `
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="hotel-name">👤 ${escapeHtml(user.fullname || user.name || 'Без имени')}</div>
+                    <div class="hotel-details">📧 ${escapeHtml(user.email)}</div>
+                    <div class="hotel-details">
+                        <span class="status-badge ${user.blocked ? 'status-blocked' : 'status-active'}">
+                            ${user.blocked ? '🔒 Заблокирован' : '✅ Активен'}
+                        </span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    ${!user.blocked ? `<button class="btn btn-danger" onclick="blockUser('${user.email}')">🔒 Заблокировать</button>` : `<button class="btn btn-success" onclick="unblockUser('${user.email}')">🔓 Разблокировать</button>`}
+                    <button class="btn btn-danger" onclick="deleteUser('${user.email}')">🗑 Удалить</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function displayBookings() {
+        const bookings = getAllBookings();
+        const container = document.getElementById('bookingsList');
+        if (!container) return;
+        if (bookings.length === 0) {
+            container.innerHTML = '<div class="empty-state">📭 Нет бронирований</div>';
+            return;
+        }
+        const sorted = [...bookings].sort((a, b) => b.id - a.id);
+        container.innerHTML = sorted.map(booking => {
+            const statusText = booking.status === 'confirmed' ? '✅ Активно' : 
+                              (booking.status === 'completed' ? '⭐ Использовано' : 
+                              (booking.status === 'expired' ? '⏰ Завершено' : '❌ Отменено'));
+            return `
+                <div class="booking-item">
+                    <div class="booking-info">
+                        <div class="hotel-name">🏨 ${escapeHtml(booking.hotel)} • Номер ${booking.roomNumber || '—'}</div>
+                        <div class="hotel-details">👤 ${escapeHtml(booking.guestName)} • 📧 ${escapeHtml(booking.email)}</div>
+                        <div class="hotel-details">📅 ${new Date(booking.checkin).toLocaleDateString()} — ${new Date(booking.checkout).toLocaleDateString()}</div>
+                        <div class="hotel-details">💰 ${booking.total} • ${statusText}</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-danger" onclick="deleteBooking(${booking.id})">🗑 Удалить</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function displayReviews() {
+        const reviews = getAllReviews();
+        const container = document.getElementById('reviewsList');
+        if (!container) return;
+        if (reviews.length === 0) {
+            container.innerHTML = '<div class="empty-state">💬 Нет отзывов</div>';
+            return;
+        }
+        const sorted = [...reviews].sort((a, b) => b.id - a.id);
+        container.innerHTML = sorted.map(review => `
+            <div class="review-item">
+                <div class="review-info">
+                    <div class="review-text">👤 ${escapeHtml(review.user)} • ${escapeHtml(review.hotel)}</div>
+                    <div class="review-details">💬 ${escapeHtml(review.text)}</div>
+                    <div class="review-details">📅 ${new Date(review.createdAt).toLocaleDateString()}</div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-danger" onclick="deleteReview(${review.id})">🗑 Удалить</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addHotel(event) {
+        event.preventDefault();
+        const name = document.getElementById('hotelName').value.trim();
+        const hotelClass = document.getElementById('hotelClass').value;
+        const location = document.getElementById('hotelLocation').value.trim();
+        const desc = document.getElementById('hotelDesc').value.trim();
+        const price = parseInt(document.getElementById('hotelPrice').value);
+        const roomsCount = parseInt(document.getElementById('hotelRoomsCount').value);
+        const image = document.getElementById('hotelImage').value.trim() || 'images/hotel-default.jpg';
+        let servicesInput = document.getElementById('hotelServices').value.trim();
+        let services = servicesInput ? servicesInput.split(',').map(s => s.trim()).filter(s => s) : [];
+        if (services.length === 0) services = ["Бесплатный Wi-Fi", "Парковка", "Завтрак", "Камера хранения", "Круглосуточная стойка"];
+        if (services.length > 5) services = services.slice(0,5);
+        if (services.length < 5) {
+            while(services.length < 5) services.push("Доп. услуга");
+        }
+
+        if (!name || !location || !price || !roomsCount) {
+            showToast('❌ Заполните все обязательные поля');
+            return;
+        }
+
+        const newId = Math.max(...hotels.map(h => h.id), 0) + 1;
+        const rooms = [];
+        const prefix = newId * 100;
+        for (let i = 1; i <= roomsCount; i++) {
+            rooms.push(prefix + i);
+        }
+
+        const newHotel = {
+            id: newId,
+            name: name,
+            class: hotelClass,
+            location: location,
+            desc: desc || 'Описание отсутствует',
+            price: price,
+            image: image,
+            rooms: rooms,
+            services: services
+        };
+
+        hotels.push(newHotel);
+        saveHotels();
+        document.getElementById('hotelSearchInput').value = '';
+        filterHotels();
+        document.getElementById('addHotelForm').reset();
+        showToast(`✅ Отель "${name}" успешно добавлен!`);
+        switchTab('hotels');
+    }
+
+    function editHotel(id) {
+        const hotel = hotels.find(h => h.id === id);
+        if (!hotel) return;
+        
+        const newName = prompt('Новое название отеля:', hotel.name);
+        if (newName && newName.trim()) hotel.name = newName.trim();
+        
+        const newPrice = prompt('Новая цена за ночь (₽):', hotel.price);
+        if (newPrice && !isNaN(newPrice)) hotel.price = parseInt(newPrice);
+        
+        const newDesc = prompt('Новое описание:', hotel.desc);
+        if (newDesc !== null) hotel.desc = newDesc.trim() || 'Описание отсутствует';
+        
+        const newLocation = prompt('Новый адрес:', hotel.location);
+        if (newLocation && newLocation.trim()) hotel.location = newLocation.trim();
+        
+        const newServices = prompt('Услуги (5 штук через запятую):', hotel.services ? hotel.services.join(', ') : '');
+        if (newServices !== null) {
+            let services = newServices.split(',').map(s => s.trim()).filter(s => s);
+            if (services.length === 0) services = ["Бесплатный Wi-Fi", "Парковка", "Завтрак", "Камера хранения", "Круглосуточная стойка"];
+            if (services.length > 5) services = services.slice(0,5);
+            if (services.length < 5) {
+                while(services.length < 5) services.push("Доп. услуга");
+            }
+            hotel.services = services;
+        }
+        
+        saveHotels();
+        filterHotels();
+        showToast('✅ Отель обновлён');
+    }
+
+    function deleteHotel(id) {
+        if (confirm('⚠️ Вы уверены, что хотите удалить этот отель? Все связанные бронирования останутся, но отель исчезнет из списка.')) {
+            hotels = hotels.filter(h => h.id !== id);
+            saveHotels();
+            filterHotels();
+            showToast('🗑 Отель удалён');
+        }
+    }
+
+    function blockUser(email) {
+        localStorage.setItem(`blocked_${email}`, 'true');
+        filterUsers();
+        showToast(`🔒 Пользователь ${email} заблокирован`);
+    }
+
+    function unblockUser(email) {
+        localStorage.removeItem(`blocked_${email}`);
+        filterUsers();
+        showToast(`🔓 Пользователь ${email} разблокирован`);
+    }
+
+    function deleteUser(email) {
+        if (confirm(`⚠️ Удалить пользователя ${email}? Все его данные (бронирования, карты) будут удалены безвозвратно.`)) {
+            localStorage.removeItem(`user_${email}`);
+            localStorage.removeItem(`cards_${email}`);
+            localStorage.removeItem(`blocked_${email}`);
+            let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings = bookings.filter(b => b.email !== email);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser && currentUser.email === email) {
+                localStorage.removeItem('currentUser');
+            }
+            filterUsers();
+            displayBookings();
+            showToast(`✅ Пользователь ${email} удалён`);
+        }
+    }
+
+    function deleteBooking(id) {
+        if (confirm('⚠️ Удалить бронирование?')) {
+            let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings = bookings.filter(b => b.id !== id);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            displayBookings();
+            showToast('✅ Бронирование удалено');
+        }
+    }
+
+    function deleteReview(id) {
+        if (confirm('⚠️ Удалить отзыв?')) {
+            let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            reviews = reviews.filter(r => r.id !== id);
+            localStorage.setItem('reviews', JSON.stringify(reviews));
+            displayReviews();
+            showToast('✅ Отзыв удалён');
+        }
+    }
+
+    function exportHotelsData() {
+        const data = JSON.stringify(hotels, null, 2);
+        downloadFile('hotels_export.json', data);
+        showToast('📥 Отели экспортированы');
+    }
+
+    function exportUsersData() {
+        const users = getAllUsers();
+        const data = JSON.stringify(users, null, 2);
+        downloadFile('users_export.json', data);
+        showToast('📥 Пользователи экспортированы');
+    }
+
+    function exportBookingsData() {
+        const bookings = getAllBookings();
+        const data = JSON.stringify(bookings, null, 2);
+        downloadFile('bookings_export.json', data);
+        showToast('📥 Бронирования экспортированы');
+    }
+
+    function exportReviewsData() {
+        const reviews = getAllReviews();
+        const data = JSON.stringify(reviews, null, 2);
+        downloadFile('reviews_export.json', data);
+        showToast('📥 Отзывы экспортированы');
+    }
+
+    function downloadFile(filename, content) {
+        const blob = new Blob([content], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    function switchTab(tabName) {
+        // Скрываем все панели
+        document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+        // Показываем выбранную панель
+        document.getElementById(`${tabName}Panel`).classList.add('active');
+        // Обновляем активную кнопку
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            if (btn.getAttribute('data-tab') === tabName) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        // Обновляем содержимое в зависимости от вкладки
+        if (tabName === 'hotels') filterHotels();
+        if (tabName === 'users') filterUsers();
+        if (tabName === 'bookings') displayBookings();
+        if (tabName === 'reviews') displayReviews();
+        if (tabName === 'discounts') displayDiscounts();
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Привязываем обработчики к кнопкам вкладок
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const tabName = this.getAttribute('data-tab');
+            switchTab(tabName);
+        });
+    });
+
+    document.getElementById('addHotelForm').addEventListener('submit', addHotel);
+    
+    loadData();
+    filterHotels();
+    filterUsers();
+    loadDiscounts();
+</script>
+</body>
+</html>

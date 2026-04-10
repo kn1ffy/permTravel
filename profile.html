@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="theme-color" content="#0f2a0f">
+    <title>Профиль - PermTravel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 30% 30%, #1a3a1a, #0f2a0f);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(5, 15, 5, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .header-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            color: #ffdd99;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .logo p {
+            font-size: 0.65rem;
+            color: #c9b87a;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: #ffdd99;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-menu a {
+            color: #ffdd99;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .nav-menu a:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.8);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .profile-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .profile-sidebar {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #b8860b, #9b6f0f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            border: 3px solid rgba(255, 215, 0, 0.6);
+            cursor: pointer;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.2s;
+        }
+        .avatar:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 215, 0, 0.9);
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffdd99;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .profile-name:hover {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .profile-email {
+            color: #c9b87a;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            word-break: break-all;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 1.5rem 0;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffdd99;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #c9b87a;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            background: linear-gradient(135deg, #b8860b, #9b6f0f);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            color: #ffdd99;
+        }
+        .btn-outline:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .profile-content {
+            flex: 2;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #ffdd99;
+            margin: 1rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .booking-list, .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .booking-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1rem;
+            border-left: 3px solid #b8860b;
+        }
+
+        .booking-item .booking-hotel {
+            font-weight: bold;
+            color: #ffdd99;
+            margin-bottom: 0.5rem;
+        }
+        .booking-item .booking-dates {
+            font-size: 0.85rem;
+            color: #c9b87a;
+        }
+
+        .booking-item.completed .booking-hotel {
+            color: white !important;
+        }
+        .booking-item.completed .booking-dates {
+            color: white !important;
+        }
+        .booking-item.completed .booking-dates a {
+            color: white !important;
+            text-decoration: underline;
+        }
+
+        .card-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1rem;
+            border-left: 3px solid #4caf50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-number {
+            font-weight: bold;
+            color: #ffdd99;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .delete-card {
+            background: #8b0000;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            border: none;
+        }
+
+        .empty-bookings, .empty-cards {
+            text-align: center;
+            padding: 1.5rem;
+            color: #c9b87a;
+        }
+
+        .add-card-btn {
+            background: transparent;
+            border: 1px solid #b8860b;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #ffdd99;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .add-card-btn:hover {
+            background: rgba(184,134,11,0.2);
+        }
+
+        .card-form {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .card-form input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 8px;
+            color: white;
+        }
+        .card-form input:focus {
+            outline: none;
+            border-color: #b8860b;
+        }
+        .card-form button {
+            background: #b8860b;
+            margin-top: 8px;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+        .card-form .cancel {
+            background: #666;
+            margin-left: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: rgba(0,0,0,0.9);
+            border-radius: 30px;
+            max-width: 450px;
+            width: 90%;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,215,0,0.5);
+        }
+        .modal-content h3 {
+            color: #ffdd99;
+            margin-bottom: 1rem;
+        }
+        .account-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .account-item {
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem;
+            border-radius: 16px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .account-info {
+            flex: 1;
+            cursor: pointer;
+        }
+        .account-info:hover .account-name {
+            text-decoration: underline;
+        }
+        .account-name {
+            font-weight: bold;
+            color: #ffdd99;
+        }
+        .account-email {
+            font-size: 0.8rem;
+            color: #c9b87a;
+        }
+        .delete-account-btn {
+            background: #8b0000;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+        .delete-account-btn:hover {
+            background: #b00000;
+        }
+        .modal-close {
+            background: #b8860b;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            text-align: center;
+            padding: 1.5rem;
+            color: #ffdd99;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            margin-top: 2rem;
+        }
+
+        .name-input {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #b8860b;
+            border-radius: 12px;
+            padding: 0.2rem 0.5rem;
+            color: #ffdd99;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                gap: 1.5rem;
+                padding: 2rem;
+                z-index: 150;
+                transition: left 0.4s ease;
+                border-right: 2px solid rgba(255, 215, 0, 0.5);
+            }
+            .nav-menu.active {
+                left: 0;
+            }
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 140;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            .menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+            .profile-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>🏔️ PermTravel</h1>
+                <p>Пермский край • Уральская природа</p>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html">🏠 Главная</a>
+                <a href="hotels.html">🏨 Все отели</a>
+                <a href="payment.html">💳 NFC билеты</a>
+                <a href="reviews.html">💬 Отзывы</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-wrapper">
+            <div class="profile-sidebar">
+                <div class="avatar" id="avatar"></div>
+                <div class="profile-name" id="profileName"></div>
+                <div class="profile-email" id="profileEmail"></div>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalBookings">0</div>
+                        <div class="stat-label">Бронирований</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalSpent">0 ₽</div>
+                        <div class="stat-label">Потрачено</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="activeBookings">0</div>
+                        <div class="stat-label">Активных</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="payment.html" class="btn">🎫 Мои билеты</a>
+                    <button class="btn btn-outline" onclick="showAccountSwitchModal()">🔄 Сменить аккаунт</button>
+                    <button class="btn btn-outline" onclick="logout()">🚪 Выйти</button>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="section-title">✅ Активные бронирования</div>
+                <div id="activeBookingsList" class="booking-list"></div>
+
+                <div class="section-title">📦 Завершённые бронирования</div>
+                <div id="completedBookingsList" class="booking-list"></div>
+
+                <div class="section-title">
+                    💳 Привязанные карты
+                    <button class="add-card-btn" onclick="toggleCardForm()">➕ Добавить карту</button>
+                </div>
+                <div id="cardsList" class="cards-list"></div>
+                <div id="cardFormContainer" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для выбора/удаления аккаунтов -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <h3>Управление аккаунтами</h3>
+            <div id="accountList" class="account-list"></div>
+            <button class="btn modal-close" onclick="closeAccountModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>🏔️ PermTravel | Пермский край | Уральская природа</p>
+        <p>📞 +7 (342) 123-45-67 | 📧 info@hotel-zarya.ru</p>
+    </footer>
+
+    <script>
+        let currentUser = null;
+        try {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        } catch(e) {}
+
+        if (!currentUser || !currentUser.email) {
+            window.location.href = 'account.html';
+        }
+
+        const nameElem = document.getElementById('profileName');
+        const emailElem = document.getElementById('profileEmail');
+        const avatarElem = document.getElementById('avatar');
+
+        // ---- Управление пользователями ----
+        function getAllUsers() {
+            const users = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('user_')) {
+                    try {
+                        const user = JSON.parse(localStorage.getItem(key));
+                        if (user && user.email) {
+                            users.push(user);
+                        }
+                    } catch(e) {}
+                }
+            }
+            return users;
+        }
+
+        function deleteUserAccount(email) {
+            if (!email) return;
+            if (email === currentUser.email) {
+                alert('❌ Нельзя удалить текущий аккаунт. Сначала переключитесь на другой.');
+                return;
+            }
+            if (confirm(`⚠️ Вы уверены, что хотите безвозвратно удалить аккаунт ${email}? Все данные (бронирования, карты) будут стёрты.`)) {
+                // Удаляем запись пользователя
+                localStorage.removeItem('user_' + email);
+                // Удаляем его карты
+                localStorage.removeItem('cards_' + email);
+                // Удаляем его бронирования из общего списка
+                let bookings = [];
+                try {
+                    bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+                } catch(e) {}
+                const newBookings = bookings.filter(b => b.email !== email);
+                localStorage.setItem('bookings', JSON.stringify(newBookings));
+                // Обновляем список в модалке
+                showAccountSwitchModal(true); // true = обновить без перезагрузки
+                alert(`✅ Аккаунт ${email} удалён.`);
+            }
+        }
+
+        function switchToUser(user) {
+            if (!user) return;
+            if (user.email === currentUser.email) {
+                closeAccountModal();
+                return;
+            }
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            window.location.reload();
+        }
+
+        function showAccountSwitchModal(keepOpen = false) {
+            const modal = document.getElementById('accountModal');
+            const container = document.getElementById('accountList');
+            const users = getAllUsers();
+            if (users.length === 0) {
+                container.innerHTML = '<div class="empty-cards">Нет других аккаунтов</div>';
+            } else {
+                container.innerHTML = users.map(u => `
+                    <div class="account-item">
+                        <div class="account-info" onclick="switchToUser(${JSON.stringify(u).replace(/"/g, '&quot;')})">
+                            <div class="account-name">${escapeHtml(u.fullname || u.name || 'Без имени')}</div>
+                            <div class="account-email">${escapeHtml(u.email)}</div>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            ${u.email !== currentUser.email ? `<button class="delete-account-btn" onclick="deleteUserAccount('${u.email}')">🗑 Удалить</button>` : '<span style="color:#4caf50; font-size:0.8rem;">✔ Текущий</span>'}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            modal.classList.add('active');
+            if (!keepOpen) {
+                // автоматическое закрытие не нужно, оставляем открытым
+            }
+        }
+
+        function closeAccountModal() {
+            document.getElementById('accountModal').classList.remove('active');
+        }
+
+        // ---- Сохранение данных пользователя ----
+        function saveUserData(updates) {
+            currentUser = { ...currentUser, ...updates };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            const userKey = 'user_' + currentUser.email;
+            let storedUser = null;
+            try {
+                storedUser = JSON.parse(localStorage.getItem(userKey));
+                if (storedUser) {
+                    storedUser = { ...storedUser, ...updates };
+                    localStorage.setItem(userKey, JSON.stringify(storedUser));
+                }
+            } catch(e) {}
+        }
+
+        function updateAvatarDisplay() {
+            if (currentUser.avatar) {
+                avatarElem.style.backgroundImage = `url('${currentUser.avatar}')`;
+                avatarElem.style.backgroundSize = 'cover';
+                avatarElem.style.backgroundPosition = 'center';
+                avatarElem.textContent = '';
+            } else {
+                avatarElem.style.backgroundImage = '';
+                avatarElem.style.background = 'linear-gradient(135deg, #b8860b, #9b6f0f)';
+                const firstLetter = (currentUser.fullname || currentUser.name || 'Г')[0].toUpperCase();
+                avatarElem.textContent = firstLetter;
+            }
+        }
+
+        function updateNameDisplay() {
+            nameElem.textContent = currentUser.fullname || currentUser.name || 'Гость';
+        }
+
+        updateNameDisplay();
+        emailElem.textContent = currentUser.email;
+        updateAvatarDisplay();
+
+        nameElem.addEventListener('click', function() {
+            const oldName = nameElem.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = oldName;
+            input.className = 'name-input';
+            const saveName = () => {
+                const newName = input.value.trim();
+                if (newName && newName !== oldName) {
+                    saveUserData({ fullname: newName, name: newName });
+                    updateNameDisplay();
+                } else {
+                    nameElem.textContent = oldName;
+                }
+            };
+            input.addEventListener('blur', saveName);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') saveName();
+            });
+            nameElem.textContent = '';
+            nameElem.appendChild(input);
+            input.focus();
+        });
+
+        avatarElem.addEventListener('click', function() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        saveUserData({ avatar: ev.target.result });
+                        updateAvatarDisplay();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            fileInput.click();
+        });
+
+        // ---- Карты ----
+        let userCards = [];
+        function loadCards() {
+            const key = `cards_${currentUser.email}`;
+            const saved = localStorage.getItem(key);
+            if (saved) {
+                userCards = JSON.parse(saved);
+            } else {
+                userCards = [];
+            }
+            renderCards();
+        }
+
+        function saveCards() {
+            const key = `cards_${currentUser.email}`;
+            localStorage.setItem(key, JSON.stringify(userCards));
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cardsList');
+            if (userCards.length === 0) {
+                container.innerHTML = '<div class="empty-cards">💳 Нет привязанных карт. Добавьте карту для оплаты.</div>';
+                return;
+            }
+            container.innerHTML = userCards.map((card, index) => `
+                <div class="card-item">
+                    <div class="card-info">
+                        <div class="card-number">💳 •••• ${card.last4}</div>
+                        <div style="font-size:0.8rem; color:#c9b87a;">${card.type} • ${card.expiry}</div>
+                    </div>
+                    <button class="delete-card" onclick="deleteCard(${index})">🗑 Удалить</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteCard(index) {
+            if (confirm('Удалить эту карту?')) {
+                userCards.splice(index, 1);
+                saveCards();
+                renderCards();
+            }
+        }
+
+        function toggleCardForm() {
+            const container = document.getElementById('cardFormContainer');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                container.innerHTML = `
+                    <div class="card-form">
+                        <h4 style="color:#ffdd99; margin-bottom:8px;">Добавить карту</h4>
+                        <input type="text" id="cardNumber" placeholder="Номер карты (16 цифр)" maxlength="19">
+                        <input type="text" id="cardExpiry" placeholder="ММ/ГГ" maxlength="5">
+                        <input type="password" id="cardCvv" placeholder="CVV" maxlength="4">
+                        <input type="text" id="cardName" placeholder="Имя держателя">
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button onclick="addCard()">Сохранить</button>
+                            <button class="cancel" onclick="toggleCardForm()">Отмена</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.style.display = 'none';
+                container.innerHTML = '';
+            }
+        }
+
+        function addCard() {
+            const number = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const expiry = document.getElementById('cardExpiry').value;
+            const cvv = document.getElementById('cardCvv').value;
+            const name = document.getElementById('cardName').value.trim();
+
+            if (!/^\d{16}$/.test(number)) {
+                alert('Введите корректный 16-значный номер карты');
+                return;
+            }
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+                alert('Введите дату в формате ММ/ГГ');
+                return;
+            }
+            if (!/^\d{3,4}$/.test(cvv)) {
+                alert('CVV должен содержать 3 или 4 цифры');
+                return;
+            }
+            if (name === '') {
+                alert('Введите имя держателя карты');
+                return;
+            }
+
+            const last4 = number.slice(-4);
+            let type = 'Карта';
+            if (number.startsWith('4')) type = 'Visa';
+            else if (number.startsWith('5')) type = 'Mastercard';
+            else if (number.startsWith('2')) type = 'Mir';
+
+            userCards.push({
+                last4: last4,
+                expiry: expiry,
+                type: type,
+                holder: name,
+            });
+            saveCards();
+            renderCards();
+            toggleCardForm();
+        }
+
+        // ---- Бронирования ----
+        let allBookings = [];
+        try {
+            const saved = localStorage.getItem('bookings');
+            if (saved) allBookings = JSON.parse(saved);
+        } catch(e) {}
+
+        const userBookings = allBookings.filter(ticket => ticket.email === currentUser.email);
+        const activeBookingsData = userBookings.filter(t => t.status === 'confirmed' || !t.status);
+        const completedBookingsData = userBookings.filter(t => t.status === 'completed' || t.status === 'cancelled');
+
+        const totalBookings = userBookings.length;
+        const activeCount = activeBookingsData.length;
+
+        let totalSpent = 0;
+        userBookings.forEach(ticket => {
+            if (ticket.status !== 'cancelled') {
+                let amount = 0;
+                if (ticket.total) {
+                    const numericString = ticket.total.toString().replace(/[^\d.-]/g, '');
+                    amount = parseFloat(numericString) || 0;
+                }
+                totalSpent += amount;
+            }
+        });
+
+        document.getElementById('totalBookings').textContent = totalBookings;
+        document.getElementById('activeBookings').textContent = activeCount;
+        document.getElementById('totalSpent').textContent = totalSpent.toLocaleString() + ' ₽';
+
+        function renderBookings(list, data, emptyMessage, isCompleted = false) {
+            if (data.length === 0) {
+                list.innerHTML = `<div class="empty-bookings">${emptyMessage}</div>`;
+                return;
+            }
+            const sorted = [...data].sort((a, b) => (b.id || 0) - (a.id || 0));
+            list.innerHTML = sorted.map(booking => {
+                const checkin = booking.checkin ? new Date(booking.checkin).toLocaleDateString('ru-RU') : '—';
+                const checkout = booking.checkout ? new Date(booking.checkout).toLocaleDateString('ru-RU') : '—';
+                let statusText = '';
+                if (booking.status === 'confirmed' || !booking.status) statusText = '✅ Активно';
+                else if (booking.status === 'completed') statusText = '⭐ Использовано';
+                else if (booking.status === 'cancelled') statusText = '❌ Отменено';
+                const completedClass = isCompleted ? 'completed' : '';
+                return `
+                    <div class="booking-item ${completedClass}">
+                        <div class="booking-hotel">🏨 ${escapeHtml(booking.hotel)}</div>
+                        <div class="booking-dates">📅 ${checkin} — ${checkout}</div>
+                        <div class="booking-dates">💰 ${booking.total} • ${statusText}</div>
+                        <div style="margin-top: 8px;">
+                            <a href="payment.html" style="color:#ffdd99; font-size:0.8rem; text-decoration:underline;">Подробнее</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        const activeContainer = document.getElementById('activeBookingsList');
+        const completedContainer = document.getElementById('completedBookingsList');
+
+        renderBookings(activeContainer, activeBookingsData, '😴 У вас нет активных бронирований. <br> <a href="hotels.html" style="color:#ffdd99;">Выберите отель →</a>', false);
+        renderBookings(completedContainer, completedBookingsData, '📭 Здесь будут отображаться использованные или отменённые бронирования.', true);
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('rememberedEmail');
+            localStorage.removeItem('rememberedPassword');
+            window.location.href = 'account.html';
+        }
+
+        loadCards();
+
+        // Бургер-меню
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function openMenu() {
+            hamburger.classList.add('active');
+            navMenu.classList.add('active');
+            if (menuOverlay) menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        if (hamburger) {
+            hamburger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (navMenu.classList.contains('active')) closeMenu();
+                else openMenu();
+            });
+        }
+        if (menuOverlay) menuOverlay.addEventListener('click', closeMenu);
+        document.querySelectorAll('.nav-menu a').forEach(link => link.addEventListener('click', closeMenu));
+        window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+
+        document.getElementById('accountModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAccountModal();
+        });
+    </script>
+</body>
+</html>

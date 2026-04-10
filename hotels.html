@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+<meta name="theme-color" content="#0f2a0f">
+<title>PermTravel - Отели Пермского края</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    animation: bgShift 20s ease-in-out infinite;
+}
+
+@keyframes bgShift {
+    0% { background: radial-gradient(circle at 20% 30%, #1a3a1a, #0f2a0f, #051505); }
+    20% { background: radial-gradient(circle at 40% 60%, #2a552a, #1a3a1a, #0a1f0a); }
+    40% { background: radial-gradient(circle at 70% 40%, #236623, #143214, #082008); }
+    60% { background: radial-gradient(circle at 80% 70%, #1e4a1e, #0f2f0f, #051505); }
+    80% { background: radial-gradient(circle at 30% 80%, #2a552a, #1a3a1a, #0a1f0a); }
+    100% { background: radial-gradient(circle at 20% 30%, #1a3a1a, #0f2a0f, #051505); }
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.08), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    animation: particles 8s ease-in-out infinite;
+}
+
+@keyframes particles {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.02); }
+}
+
+.back-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    border-radius: 50px;
+    padding: 12px 24px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.back-btn:hover, .back-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.9);
+}
+
+header {
+    background: rgba(5, 15, 5, 0.85);
+    backdrop-filter: blur(12px);
+    padding: 1rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+}
+.header-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo h1 {
+    font-size: 1.3rem;
+    color: #ffdd99;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+.logo p {
+    font-size: 0.65rem;
+    color: #c9b87a;
+}
+
+/* Десктопное меню */
+.nav-menu {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.nav-menu a {
+    color: #ffdd99;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+.nav-menu a:hover, .nav-menu a:active {
+    background: rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Кнопка бургер (скрыта на десктопе) */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 201;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+.hamburger span {
+    width: 28px;
+    height: 3px;
+    background: #ffdd99;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -7px);
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
+    border-radius: 40px;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+}
+.header h1 {
+    font-size: 2rem;
+    color: #ffdd99;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    margin-bottom: 10px;
+}
+.header p {
+    color: #d4c88c;
+}
+
+.search-section {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+.search-box {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+.search-box input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s;
+}
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+.search-box input:focus {
+    border-color: #b8860b;
+    background: rgba(255, 255, 255, 0.15);
+}
+.search-box button {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.search-box button:active {
+    transform: scale(0.98);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    padding: 10px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    color: white;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+.filter-btn.active {
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+}
+
+.hotels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+.hotel-card {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+.hotel-card:hover, .hotel-card:active {
+    transform: translateY(-5px);
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+.hotel-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.hotel-info {
+    padding: 20px;
+}
+.hotel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.hotel-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ffdd99;
+}
+.hotel-class {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+.class-econom { background: #4caf50; color: white; }
+.class-comfort { background: #2196f3; color: white; }
+.class-premium { background: #ff9800; color: white; }
+.hotel-location {
+    color: #c9b87a;
+    font-size: 0.9rem;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.hotel-desc {
+    color: #c9b87a;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 12px 0;
+}
+.hotel-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffdd99;
+    margin: 12px 0;
+}
+.price-period {
+    font-size: 0.8rem;
+    color: #c9b87a;
+    font-weight: normal;
+}
+.rooms-info {
+    font-size: 0.8rem;
+    color: #c9b87a;
+    margin-top: 5px;
+    padding: 5px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+}
+.services-list {
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.service-badge {
+    background: rgba(255,215,0,0.2);
+    border: 1px solid rgba(255,215,0,0.4);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    color: #ffdd99;
+}
+.book-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-top: 10px;
+}
+.book-btn:active {
+    transform: scale(0.98);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+.modal.active {
+    display: flex;
+}
+.modal-content {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 30px;
+    max-width: 550px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.modal-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    color: white;
+    border-radius: 28px 28px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header h2 { font-size: 1.3rem; }
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-body {
+    padding: 20px;
+}
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.form-group label {
+    font-weight: bold;
+    color: #ffdd99;
+}
+.form-group input, .form-group select {
+    padding: 12px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 16px;
+}
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #b8860b;
+}
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.form-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.form-row .form-group {
+    flex: 1;
+}
+.pay-btn {
+    padding: 14px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.pay-btn:active {
+    transform: scale(0.98);
+}
+.discounts-section {
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 15px;
+    padding: 12px;
+    margin: 10px 0;
+}
+.discounts-section h4 {
+    color: #ffdd99;
+    margin-bottom: 10px;
+}
+.discount-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.discount-option:hover {
+    background: rgba(255, 215, 0, 0.15);
+}
+.discount-option.selected {
+    background: rgba(255, 215, 0, 0.3);
+    border-left: 3px solid #b8860b;
+}
+.discount-option input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+.discount-option label {
+    flex: 1;
+    cursor: pointer;
+    color: white;
+}
+.discount-percent {
+    color: #4caf50;
+    font-weight: bold;
+}
+.services-modal {
+    margin: 10px 0;
+    padding: 8px;
+    background: rgba(255,215,0,0.05);
+    border-radius: 12px;
+}
+.services-modal span {
+    display: inline-block;
+    background: rgba(255,215,0,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin: 4px;
+    font-size: 0.8rem;
+    color: #ffdd99;
+}
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.9);
+    color: #ffdd99;
+    padding: 12px 24px;
+    border-radius: 50px;
+    z-index: 1100;
+    animation: fadeInUp 0.3s ease;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+}
+@keyframes fadeInUp {
+    from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* ========== МОБИЛЬНАЯ ВЕРСИЯ С БУРГЕР-МЕНЮ ========== */
+@media (max-width: 768px) {
+    body { padding: 0; }
+    
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 15px;
+    }
+    
+    /* Показываем бургер */
+    .hamburger {
+        display: flex;
+    }
+    
+    /* Мобильное меню - выезжающее слева */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 80px;
+        gap: 15px;
+        transition: left 0.4s ease;
+        z-index: 200;
+        border-right: 2px solid rgba(255, 215, 0, 0.5);
+        box-shadow: 5px 0 30px rgba(0,0,0,0.5);
+    }
+    
+    .nav-menu.active {
+        left: 0;
+    }
+    
+    .nav-menu a {
+        width: 90%;
+        text-align: center;
+        padding: 14px 20px;
+        font-size: 1.1rem;
+        background: rgba(255, 215, 0, 0.1);
+        margin: 0 auto;
+    }
+    
+    .nav-menu a:active {
+        transform: scale(0.98);
+    }
+    
+    /* Затемнение фона при открытом меню */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 150;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .hotels-grid { grid-template-columns: 1fr; gap: 20px; }
+    .search-box { flex-direction: column; }
+    .search-box button { width: 100%; }
+    .filter-buttons { justify-content: center; }
+    .filter-btn { flex: 1; text-align: center; font-size: 0.85rem; padding: 8px 12px; }
+    .hotel-name { font-size: 1.1rem; }
+    .modal-content { margin: 20px; }
+    .container { padding: 1rem; }
+    .back-btn { bottom: 10px; right: 10px; padding: 8px 16px; font-size: 12px; }
+    .form-row { flex-direction: column; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+    .header h1 { font-size: 1.5rem; }
+    .logo h1 { font-size: 1rem; }
+    .logo p { font-size: 0.55rem; }
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #b8860b, #9b6f0f);
+    border-radius: 3px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>🏔️ PermTravel</h1>
+            <p>Лучшие отели Пермского края</p>
+        </div>
+        <!-- Бургер-кнопка -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <a href="profile.html">🏠 Профиль</a>
+            <a href="account.html">👤 Регистрация</a>
+            <a href="payment.html">💳 NFC билеты</a>
+            <a href="reviews.html">💬 Отзывы</a>
+            <a href="index.html"> 🏠главная</a>
+        </div>
+    </div>
+</header>
+
+<!-- Затемнение фона для мобильного меню -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>🏨 PermTravel</h1>
+        <p>Лучшие отели Пермского края</p>
+    </div>
+    <div class="search-section">
+        <div class="search-box">
+            <div class="search-input-wrapper">
+                <input type="text" id="searchInput" placeholder="🔍 Поиск отелей по названию или городу...">
+            </div>
+            <button onclick="searchHotels()">Найти</button>
+        </div>
+        <div class="filter-buttons">
+            <div class="filter-btn active" data-class="all" onclick="filterByClass('all')">🏨 Все</div>
+            <div class="filter-btn" data-class="econom" onclick="filterByClass('econom')">💰 Эконом</div>
+            <div class="filter-btn" data-class="comfort" onclick="filterByClass('comfort')">⭐ Комфорт</div>
+            <div class="filter-btn" data-class="premium" onclick="filterByClass('premium')">👑 Премиум</div>
+        </div>
+    </div>
+    <div id="hotelsList" class="hotels-grid"></div>
+</div>
+
+<div class="back-btn" onclick="goToMain()">🏠 На главную →</div>
+
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>💳 Оплата бронирования</h2>
+            <button class="close-modal" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="hotelInfo" style="background: rgba(255,215,0,0.1); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid rgba(255,215,0,0.3);"></div>
+            <div id="modalServices" class="services-modal"></div>
+            
+            <div class="discounts-section">
+                <h4>🎁 Льготные категории (выберите одну)</h4>
+                <div class="discount-option" onclick="selectDiscount('pension')">
+                    <input type="radio" name="discountType" id="discountPension" value="pension">
+                    <label for="discountPension">👴 Пенсионеры</label>
+                    <span class="discount-percent" id="pensionPercent">-15%</span>
+                </div>
+                <div class="discount-option" onclick="selectDiscount('disabled')">
+                    <input type="radio" name="discountType" id="discountDisabled" value="disabled">
+                    <label for="discountDisabled">♿ Инвалиды</label>
+                    <span class="discount-percent" id="disabledPercent">-20%</span>
+                </div>
+                <div class="discount-option" onclick="selectDiscount('svo')">
+                    <input type="radio" name="discountType" id="discountSvo" value="svo">
+                    <label for="discountSvo">🪖 Участники СВО</label>
+                    <span class="discount-percent" id="svoPercent">-25%</span>
+                </div>
+                <div class="discount-option" onclick="selectDiscount('family')">
+                    <input type="radio" name="discountType" id="discountFamily" value="family">
+                    <label for="discountFamily">👨‍👩‍👧 Многодетные семьи</label>
+                    <span class="discount-percent" id="familyPercent">-10%</span>
+                </div>
+            </div>
+
+            <form class="payment-form" id="paymentForm">
+                <div class="form-group">
+                    <label>📱 Номер телефона</label>
+                    <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>📛 Фамилия</label>
+                        <input type="text" id="lastname" placeholder="Иванов" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📛 Имя</label>
+                        <input type="text" id="firstname" placeholder="Иван" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>📛 Отчество (необязательно)</label>
+                    <input type="text" id="patronymic" placeholder="Иванович">
+                </div>
+                <div class="form-group">
+                    <label>📧 Email для чека</label>
+                    <input type="email" id="email" placeholder="example@mail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>📄 Паспортные данные</label>
+                    <input type="text" id="passport" placeholder="1234 567890" required>
+                </div>
+                <div class="form-group">
+                    <label>📅 Дата заезда</label>
+                    <input type="date" id="checkin" required>
+                </div>
+                <div class="form-group">
+                    <label>📅 Дата выезда</label>
+                    <input type="date" id="checkout" required>
+                </div>
+                <div class="form-group">
+                    <label>👥 Количество гостей</label>
+                    <input type="number" id="guests" min="1" max="10" value="2" required>
+                </div>
+                <div class="form-group">
+                    <label>🎁 Промокод (необязательно)</label>
+                    <input type="text" id="promocode" placeholder="PERTRAVEL10 или WELCOME15">
+                </div>
+                <div id="priceDetails" style="background: linear-gradient(135deg, rgba(184,134,11,0.2), rgba(155,111,15,0.2)); color: #ffdd99; padding: 15px; border-radius: 15px; margin: 10px 0; border: 1px solid rgba(255,215,0,0.3);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Стоимость за ночь:</span><span id="nightPrice">0 ₽</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Количество ночей:</span><span id="nightsCount">0</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Доплата за доп. гостей:</span><span id="extraGuestsCost">0 ₽</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Скидка по промокоду:</span><span id="promoDiscount">0 ₽</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Скидка по льготе:</span><span id="socialDiscount">0 ₽</span></div>
+                    <hr style="margin: 10px 0; border-color: rgba(255,215,0,0.3);">
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;"><span>ИТОГО:</span><span id="totalPrice">0 ₽</span></div>
+                </div>
+                <button type="submit" class="pay-btn">💳 Оплатить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// ------------------ ДАННЫЕ ОТЕЛЕЙ С НОМЕРАМИ И УСЛУГАМИ ------------------
+const hotels = [
+    { id: 1, name: "Гостиница «Урал»", class: "econom", location: "Пермь, ул. Ленина, 58", desc: "Уютная гостиница в центре Перми. Рядом вокзал и основные достопримечательности.", price: 2500, image: "images/ural.jpg", rooms: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112],
+      services: ["Бесплатный Wi-Fi", "Круглосуточная стойка", "Камера хранения", "Парковка", "Завтрак в номер"] },
+    { id: 2, name: "Отель «Прикамье»", class: "econom", location: "Пермь, шоссе Космонавтов, 162", desc: "Недорогой отель с базовыми удобствами. Отличный вариант для командировок.", price: 2200, image: "images/prim.jpg", rooms: [201, 202, 203, 204, 205, 206, 207, 208, 209, 210],
+      services: ["Бесплатный Wi-Fi", "Бизнес-центр", "Трансфер", "Автомат с напитками", "Гладильная комната"] },
+    { id: 3, name: "Гостевой дом «Pride»", class: "econom", location: "Березники, ул. Березовская, 12", desc: "Гостевой дом с домашней атмосферой. Чисто, уютно, есть кухня.", price: 1800, image: "images/pride.jpg", rooms: [301, 302, 303, 304, 305, 306, 307, 308],
+      services: ["Общая кухня", "Бесплатный чай/кофе", "Терраса", "Парковка", "Прогулка с гидом"] },
+    { id: 4, name: "Мини-отель «Спутник»", class: "econom", location: "Соликамск, ул. Северная, 45", desc: "Небольшой отель в тихом районе. Идеально для бюджетного размещения.", price: 1900, image: "images/sputnik.jpg", rooms: [401, 402, 403, 404, 405, 406, 407, 408],
+      services: ["Бесплатный Wi-Fi", "Кулер с водой", "Мини-кухня", "Трансфер до вокзала", "Сушка для одежды"] },
+    { id: 5, name: "Гостиница «Адам и Ева»", class: "econom", location: "Пермь, ул. Пушкарская, 100", desc: "Мини-отель недалеко от центра города.", price: 2300, image: "images/AE.jpg", rooms: [501, 502, 503, 504, 505, 506, 507, 508, 509, 510],
+      services: ["Бесплатный Wi-Fi", "Завтрак", "Камера хранения", "Парковка", "Утюг"] },
+    { id: 6, name: "Отель «Element»", class: "comfort", location: "Пермь, ул. Мира, 39", desc: "Комфортабельный отель с рестораном, сауной и тренажерным залом.", price: 4500, image: "images/element.jpg", rooms: [601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620],
+      services: ["Сауна", "Фитнес-зал", "Ресторан", "Бесплатный Wi-Fi", "Конференц-зал"] },
+    { id: 7, name: "Гостиница «Атриум»", class: "comfort", location: "Пермь, ул. Куйбышева, 68", desc: "Современный отель в центре Перми. Просторные номера, ресторан.", price: 4800, image: "images/atrium.jpg", rooms: [701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716],
+      services: ["Ресторан", "Бесплатный Wi-Fi", "Парковка", "Бизнес-центр", "Фитнес"] },
+    { id: 8, name: "Отель «Green Village»", class: "comfort", location: "Пермский р-н, д. Кондратово", desc: "Отель в экологически чистом районе. Банный комплекс.", price: 5200, image: "images/greemVil.jpg", rooms: [801, 802, 803, 804, 805, 806, 807, 808, 809, 810, 811, 812, 813, 814],
+      services: ["Банный комплекс", "Бесплатный Wi-Fi", "Парковка", "Пикник зона", "Прокат велосипедов"] },
+    { id: 9, name: "Отель «Сталагмит»", class: "comfort", location: "Кунгур, ул. Октябрьская, 15", desc: "Отель в центре Кунгура. Рядом Кунгурская пещера.", price: 3900, image: "images/kungur.jpg", rooms: [901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912],
+      services: ["Экскурсии в пещеру", "Бесплатный Wi-Fi", "Трансфер", "Камера хранения", "Завтрак"] },
+    { id: 10, name: "Гостиница «Чайковский Арт»", class: "comfort", location: "Чайковский, ул. Вокзальная, 18", desc: "Стильный отель с дизайнерскими номерами.", price: 4200, image: "images/Chaikovskii.jpg", rooms: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015],
+      services: ["Арт-пространство", "Бесплатный Wi-Fi", "Парковка", "Кофе-брейк", "Терраса"] },
+    { id: 11, name: "Hyatt Regency Perm", class: "premium", location: "Пермь, ул. Мира, 45", desc: "Пятизвездочный отель мирового уровня. Спа-центр, рестораны высокой кухни.", price: 12500, image: "images/hyatt.jpg", rooms: [1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118],
+      services: ["Спа-центр", "Фитнес", "Бассейн", "Ресторан", "Консьерж-сервис"] },
+    { id: 12, name: "Park Hotel «Пермский»", class: "premium", location: "Пермь, шоссе Космонавтов, 111", desc: "Престижный парк-отель с собственным парком. SPA, рестораны.", price: 9800, image: "images/permskyi.jpg", rooms: [1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216],
+      services: ["СПА", "Бассейн", "Парк", "Бесплатный Wi-Fi", "Ресторан"] },
+    { id: 13, name: "Отель «Белый Камень»", class: "premium", location: "Пермский р-н, д. Курашим", desc: "Роскошный загородный отель. Номера класса люкс, спа, бильярд.", price: 11200, image: "images/kamen.jpg", rooms: [1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312],
+      services: ["Бильярд", "СПА-комплекс", "Ресторан", "Конный двор", "Трансфер"] },
+    { id: 14, name: "Grand Hotel «Усьва»", class: "premium", location: "Гремячинский р-н, пос. Усьва", desc: "Премиальный отель у скалы Усьвинские Столбы. Роскошные номера.", price: 14500, image: "images/ysva.jpg", rooms: [1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414],
+      services: ["Вид на скалы", "СПА", "Ресторан", "Экскурсии", "Вертолётная площадка"] },
+    { id: 15, name: "Отель «Княжий двор»", class: "premium", location: "Пермь, ул. Монастырская, 12", desc: "Бутик-отель в историческом здании. Эксклюзивные номера.", price: 13500, image: "images/last.jpg", rooms: [1501, 1502, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510, 1511, 1512, 1513, 1514, 1515],
+      services: ["Исторический интерьер", "Ресторан", "Консьерж", "Парковка", "Бесплатный Wi-Fi"] }
+];
+
+// ------------------ СКИДКИ ПО ЛЬГОТАМ ------------------
+let socialDiscounts = {
+    pension: { name: "Пенсионеры", percent: 15, selected: false },
+    disabled: { name: "Инвалиды", percent: 20, selected: false },
+    svo: { name: "Участники СВО", percent: 25, selected: false },
+    family: { name: "Многодетные семьи", percent: 10, selected: false }
+};
+
+function loadDiscountsFromStorage() {
+    const saved = localStorage.getItem('admin_discounts');
+    if (saved) {
+        const discounts = JSON.parse(saved);
+        socialDiscounts.pension.percent = discounts.pension?.value || 15;
+        socialDiscounts.disabled.percent = discounts.disabled?.value || 20;
+        socialDiscounts.svo.percent = discounts.svo?.value || 25;
+        socialDiscounts.family.percent = discounts.family?.value || 10;
+    }
+    updateDiscountPercentDisplay();
+}
+
+function updateDiscountPercentDisplay() {
+    document.getElementById('pensionPercent').textContent = `-${socialDiscounts.pension.percent}%`;
+    document.getElementById('disabledPercent').textContent = `-${socialDiscounts.disabled.percent}%`;
+    document.getElementById('svoPercent').textContent = `-${socialDiscounts.svo.percent}%`;
+    document.getElementById('familyPercent').textContent = `-${socialDiscounts.family.percent}%`;
+}
+
+function selectDiscount(type) {
+    for (let key in socialDiscounts) socialDiscounts[key].selected = false;
+    socialDiscounts[type].selected = true;
+    document.querySelectorAll('input[name="discountType"]').forEach(radio => radio.checked = false);
+    document.getElementById(`discount${type.charAt(0).toUpperCase() + type.slice(1)}`).checked = true;
+    document.querySelectorAll('.discount-option').forEach(opt => opt.classList.remove('selected'));
+    event.target.closest('.discount-option').classList.add('selected');
+    calculateTotal();
+}
+
+// ------------------ ФУНКЦИИ ДЛЯ РАБОТЫ С НОМЕРАМИ ------------------
+function datesOverlap(checkin1, checkout1, checkin2, checkout2) {
+    const start1 = new Date(checkin1);
+    const end1 = new Date(checkout1);
+    const start2 = new Date(checkin2);
+    const end2 = new Date(checkout2);
+    return start1 < end2 && start2 < end1;
+}
+
+function getBookedRoomsForPeriod(hotelId, checkin, checkout) {
+    const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    const bookedRooms = [];
+    bookings.forEach(booking => {
+        if (booking.status === 'confirmed' && booking.hotelId === hotelId && booking.roomNumber) {
+            if (datesOverlap(checkin, checkout, booking.checkin, booking.checkout)) {
+                bookedRooms.push(booking.roomNumber);
+            }
+        }
+    });
+    return bookedRooms;
+}
+
+function getAvailableRoom(hotelId, roomsList, checkin, checkout) {
+    const bookedRooms = getBookedRoomsForPeriod(hotelId, checkin, checkout);
+    const available = roomsList.filter(room => !bookedRooms.includes(room));
+    return available.length > 0 ? available[0] : null;
+}
+
+function getFreeRoomsCountForPeriod(hotelId, roomsList, checkin, checkout) {
+    if (!checkin || !checkout) return roomsList.length;
+    const bookedRooms = getBookedRoomsForPeriod(hotelId, checkin, checkout);
+    return roomsList.length - bookedRooms.length;
+}
+
+function getFreeRoomsCountTotal(hotelId, roomsList) {
+    const today = new Date().toISOString().split('T')[0];
+    const nextYear = new Date();
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    const nextYearStr = nextYear.toISOString().split('T')[0];
+    const bookedRooms = getBookedRoomsForPeriod(hotelId, today, nextYearStr);
+    return roomsList.length - bookedRooms.length;
+}
+
+// ------------------ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ------------------
+let currentFilter = "all";
+let currentSearch = "";
+let selectedHotel = null;
+let currentUser = null;
+
+// ------------------ АВТОРИЗАЦИЯ ------------------
+function initUser() {
+    try {
+        const saved = localStorage.getItem('currentUser');
+        if (saved) currentUser = JSON.parse(saved);
+        else currentUser = null;
+    } catch(e) { currentUser = null; }
+}
+
+function checkAuth() {
+    if (!currentUser) {
+        alert('❌ Для бронирования необходимо войти в аккаунт');
+        window.location.href = 'account.html';
+        return false;
+    }
+    return true;
+}
+
+// ------------------ ПРОВЕРКА НАЛИЧИЯ КАРТ ------------------
+function getUserCards() {
+    if (!currentUser) return [];
+    const key = `cards_${currentUser.email}`;
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : [];
+}
+
+function checkUserHasCard() {
+    const cards = getUserCards();
+    if (cards.length === 0) {
+        showToast('💳 У вас нет привязанных карт. Добавьте карту в профиле, чтобы продолжить.');
+        if (confirm('Перейти в профиль для добавления карты?')) window.location.href = 'profile.html';
+        return false;
+    }
+    return true;
+}
+
+// ------------------ ОТОБРАЖЕНИЕ ОТЕЛЕЙ ------------------
+function displayHotels() {
+    let filtered = hotels.filter(hotel => {
+        const matchClass = currentFilter === "all" || hotel.class === currentFilter;
+        const matchSearch = hotel.name.toLowerCase().includes(currentSearch) || hotel.location.toLowerCase().includes(currentSearch);
+        return matchClass && matchSearch;
+    });
+    const hotelsList = document.getElementById('hotelsList');
+    hotelsList.innerHTML = '';
+    if (filtered.length === 0) {
+        hotelsList.innerHTML = '<div style="text-align:center; padding:50px; background:rgba(0,0,0,0.6); border-radius:20px; color:#ffdd99;">🏨 Нет отелей по вашему запросу</div>';
+        return;
+    }
+    filtered.forEach(hotel => {
+        const classNames = { econom: { name: "💰 Эконом", color: "class-econom" }, comfort: { name: "⭐ Комфорт", color: "class-comfort" }, premium: { name: "👑 Премиум", color: "class-premium" } };
+        const freeRooms = getFreeRoomsCountTotal(hotel.id, hotel.rooms);
+        const servicesHtml = hotel.services.map(s => `<span class="service-badge">${s}</span>`).join('');
+        const card = document.createElement('div');
+        card.className = 'hotel-card';
+        card.innerHTML = `
+            <img class="hotel-image" src="${hotel.image}" alt="${hotel.name}" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop'">
+            <div class="hotel-info">
+                <div class="hotel-header">
+                    <div class="hotel-name">${hotel.name}</div>
+                    <div class="hotel-class ${classNames[hotel.class].color}">${classNames[hotel.class].name}</div>
+                </div>
+                <div class="hotel-location">📍 ${hotel.location}</div>
+                <div class="hotel-desc">${hotel.desc}</div>
+                <div class="services-list">${servicesHtml}</div>
+                <div class="hotel-price">${hotel.price.toLocaleString()} ₽ <span class="price-period">/ ночь</span></div>
+                <div class="rooms-info">🏨 Свободных номеров: ${freeRooms} из ${hotel.rooms.length}</div>
+                <button class="book-btn" onclick="openPaymentModal(${hotel.id})">Забронировать</button>
+            </div>
+        `;
+        hotelsList.appendChild(card);
+    });
+}
+
+function searchHotels() {
+    currentSearch = document.getElementById('searchInput').value.toLowerCase();
+    displayHotels();
+}
+
+function filterByClass(className) {
+    currentFilter = className;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.filter-btn[data-class="${className}"]`).classList.add('active');
+    displayHotels();
+}
+
+// ------------------ ВАЛИДАЦИЯ ДАТ ------------------
+function validateDates() {
+    const checkinInput = document.getElementById('checkin');
+    const checkoutInput = document.getElementById('checkout');
+    const today = new Date().toISOString().split('T')[0];
+    if (checkinInput.value < today) {
+        checkinInput.value = today;
+        showToast('❌ Дата заезда не может быть раньше сегодняшнего дня');
+    }
+    if (checkoutInput.value <= checkinInput.value) {
+        const nextDay = new Date(checkinInput.value);
+        nextDay.setDate(nextDay.getDate() + 1);
+        checkoutInput.value = nextDay.toISOString().split('T')[0];
+        showToast('❌ Дата выезда должна быть позже даты заезда');
+    }
+    calculateTotal();
+    updateFreeRoomsInfo();
+}
+
+// ------------------ МОДАЛЬНОЕ ОКНО ------------------
+function openPaymentModal(hotelId) {
+    if (!checkAuth()) return;
+    if (!checkUserHasCard()) return;
+    selectedHotel = hotels.find(h => h.id === hotelId);
+    if (!selectedHotel) return;
+    const modal = document.getElementById('paymentModal');
+    const hotelInfo = document.getElementById('hotelInfo');
+    const nightPrice = document.getElementById('nightPrice');
+    hotelInfo.innerHTML = `
+        <div style="display:flex; gap:15px; align-items:center;">
+            <img src="${selectedHotel.image}" style="width:80px; height:80px; border-radius:12px; object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=80&h=80&fit=crop'">
+            <div>
+                <strong style="font-size:1.1rem; color:#ffdd99;">${selectedHotel.name}</strong><br>
+                <span style="color:#c9b87a;">📍 ${selectedHotel.location}</span><br>
+                <span style="color:#ffdd99;">💰 ${selectedHotel.price.toLocaleString()} ₽/ночь</span><br>
+                <span style="color:#c9b87a; font-size:0.8rem;">🏨 Всего номеров: ${selectedHotel.rooms.length}</span>
+            </div>
+        </div>
+    `;
+    const modalServicesDiv = document.getElementById('modalServices');
+    modalServicesDiv.innerHTML = `<strong>Услуги отеля:</strong><br> ${selectedHotel.services.map(s => `<span>${s}</span>`).join(' ')}`;
+    nightPrice.textContent = `${selectedHotel.price.toLocaleString()} ₽`;
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('checkin').min = today;
+    document.getElementById('checkout').min = today;
+    document.getElementById('checkin').value = today;
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('checkout').value = tomorrow.toISOString().split('T')[0];
+    const emailField = document.getElementById('email');
+    if (currentUser && currentUser.email) {
+        emailField.value = currentUser.email;
+        emailField.readOnly = true;
+        emailField.style.opacity = '0.8';
+        emailField.style.cursor = 'not-allowed';
+    } else {
+        emailField.value = '';
+        emailField.readOnly = false;
+        emailField.style.opacity = '1';
+        emailField.style.cursor = 'text';
+    }
+    document.getElementById('phone').value = '';
+    document.getElementById('lastname').value = '';
+    document.getElementById('firstname').value = '';
+    document.getElementById('patronymic').value = '';
+    document.getElementById('passport').value = '';
+    document.getElementById('guests').value = '2';
+    document.getElementById('promocode').value = '';
+    for (let key in socialDiscounts) socialDiscounts[key].selected = false;
+    document.querySelectorAll('input[name="discountType"]').forEach(radio => radio.checked = false);
+    document.querySelectorAll('.discount-option').forEach(opt => opt.classList.remove('selected'));
+    modal.classList.add('active');
+    document.getElementById('checkin').onchange = function() { validateDates(); };
+    document.getElementById('checkout').onchange = function() { validateDates(); };
+    document.getElementById('promocode').oninput = calculateTotal;
+    document.getElementById('guests').onchange = calculateTotal;
+    calculateTotal();
+    updateFreeRoomsInfo();
+}
+
+function updateFreeRoomsInfo() {
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+    if (!checkin || !checkout) return;
+    const freeRooms = getFreeRoomsCountForPeriod(selectedHotel.id, selectedHotel.rooms, checkin, checkout);
+    const hotelInfoDiv = document.getElementById('hotelInfo');
+    if (hotelInfoDiv) {
+        const existingInfo = hotelInfoDiv.innerHTML;
+        if (existingInfo.includes('Свободно номеров на выбранные даты:')) {
+            hotelInfoDiv.innerHTML = existingInfo.replace(/Свободно номеров на выбранные даты: \d+/, `Свободно номеров на выбранные даты: ${freeRooms}`);
+        } else {
+            hotelInfoDiv.innerHTML = existingInfo + `<div style="margin-top:8px; font-size:0.8rem; color:#ffdd99;">🏨 Свободно номеров на выбранные даты: ${freeRooms}</div>`;
+        }
+    }
+}
+
+function calculateTotal() {
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+    const promocode = document.getElementById('promocode').value;
+    const guests = parseInt(document.getElementById('guests').value) || 1;
+    if (!checkin || !checkout) return;
+    const nights = Math.max(0, Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24)));
+    if (nights <= 0) {
+        document.getElementById('nightsCount').textContent = '0';
+        document.getElementById('extraGuestsCost').textContent = '0 ₽';
+        document.getElementById('promoDiscount').textContent = '0 ₽';
+        document.getElementById('socialDiscount').textContent = '0 ₽';
+        document.getElementById('totalPrice').textContent = '0 ₽';
+        return;
+    }
+    let total = selectedHotel.price * nights;
+    let extraGuestsCost = 0;
+    if (guests > 2) extraGuestsCost = (guests - 2) * 500 * nights;
+    total += extraGuestsCost;
+    let promoDiscountValue = 0;
+    if (promocode === 'PERTRAVEL10') promoDiscountValue = total * 0.1;
+    else if (promocode === 'WELCOME15') promoDiscountValue = total * 0.15;
+    let afterPromoTotal = total - promoDiscountValue;
+    let socialDiscountValue = 0;
+    let socialDiscountPercent = 0;
+    for (let key in socialDiscounts) {
+        if (socialDiscounts[key].selected) {
+            socialDiscountPercent = socialDiscounts[key].percent;
+            socialDiscountValue = afterPromoTotal * (socialDiscountPercent / 100);
+            break;
+        }
+    }
+    const finalTotal = afterPromoTotal - socialDiscountValue;
+    document.getElementById('nightsCount').textContent = nights;
+    document.getElementById('extraGuestsCost').textContent = `${extraGuestsCost.toLocaleString()} ₽`;
+    document.getElementById('promoDiscount').textContent = `${Math.floor(promoDiscountValue).toLocaleString()} ₽`;
+    document.getElementById('socialDiscount').textContent = `${Math.floor(socialDiscountValue).toLocaleString()} ₽ (${socialDiscountPercent}%)`;
+    document.getElementById('totalPrice').textContent = `${Math.floor(finalTotal).toLocaleString()} ₽`;
+}
+
+function closeModal() {
+    document.getElementById('paymentModal').classList.remove('active');
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function goToMain() {
+    window.location.href = 'index.html';
+}
+
+// ------------------ БУРГЕР-МЕНЮ (МОБИЛЬНАЯ ВЕРСИЯ) ------------------
+function initBurgerMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    const overlay = document.getElementById('menuOverlay');
+    
+    if (!hamburger || !navMenu) return;
+    
+    function closeMenu() {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    function openMenu() {
+        navMenu.classList.add('active');
+        hamburger.classList.add('active');
+        if (overlay) overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+    
+    if (overlay) {
+        overlay.addEventListener('click', closeMenu);
+    }
+    
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+    
+    document.addEventListener('click', function(e) {
+        if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            closeMenu();
+        }
+    });
+}
+
+// ------------------ ОБРАБОТКА ОПЛАТЫ ------------------
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!checkUserHasCard()) return;
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+    if (!checkin || !checkout) {
+        showToast('❌ Укажите даты заезда и выезда');
+        return;
+    }
+    if (new Date(checkout) <= new Date(checkin)) {
+        showToast('❌ Дата выезда должна быть позже даты заезда');
+        return;
+    }
+    const freeRooms = getFreeRoomsCountForPeriod(selectedHotel.id, selectedHotel.rooms, checkin, checkout);
+    if (freeRooms === 0) {
+        showToast('❌ Извините, на выбранные даты нет свободных номеров');
+        closeModal();
+        displayHotels();
+        return;
+    }
+    const phone = document.getElementById('phone').value.trim();
+    const lastname = document.getElementById('lastname').value.trim();
+    const firstname = document.getElementById('firstname').value.trim();
+    const patronymic = document.getElementById('patronymic').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const passport = document.getElementById('passport').value.trim();
+    const guests = parseInt(document.getElementById('guests').value);
+    const promocode = document.getElementById('promocode').value.trim();
+    let discountType = null;
+    for (let key in socialDiscounts) {
+        if (socialDiscounts[key].selected) {
+            discountType = socialDiscounts[key].name;
+            break;
+        }
+    }
+    const fullname = patronymic ? `${lastname} ${firstname} ${patronymic}` : `${lastname} ${firstname}`;
+    if (!phone || !lastname || !firstname || !email || !passport || !checkin || !checkout) {
+        showToast('❌ Заполните все обязательные поля');
+        return;
+    }
+    if (!/^[\+]?[0-9\s\-\(\)]{10,}$/.test(phone)) {
+        showToast('❌ Введите корректный номер телефона');
+        return;
+    }
+    if (!email.includes('@')) {
+        showToast('❌ Введите корректный email');
+        return;
+    }
+    if (passport.length < 6) {
+        showToast('❌ Введите корректные паспортные данные');
+        return;
+    }
+    const roomNumber = getAvailableRoom(selectedHotel.id, selectedHotel.rooms, checkin, checkout);
+    if (!roomNumber) {
+        showToast('❌ Нет свободных номеров на выбранные даты');
+        closeModal();
+        displayHotels();
+        return;
+    }
+    const totalText = document.getElementById('totalPrice').textContent;
+    const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    bookings.push({
+        id: Date.now(),
+        hotel: selectedHotel.name,
+        hotelId: selectedHotel.id,
+        roomNumber: roomNumber,
+        guestName: fullname,
+        lastname: lastname,
+        firstname: firstname,
+        patronymic: patronymic,
+        phone: phone,
+        email: email,
+        passport: passport,
+        checkin: checkin,
+        checkout: checkout,
+        guests: guests,
+        total: totalText,
+        promocode: promocode,
+        discountType: discountType,
+        date: new Date().toISOString(),
+        status: 'confirmed'
+    });
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+    let discountMessage = discountType ? ` (скидка по льготе: ${discountType})` : '';
+    showToast(`✅ Бронь оплачена! Номер ${roomNumber}. Сумма: ${totalText}. Чек отправлен на ${email}${discountMessage}`);
+    setTimeout(() => {
+        closeModal();
+        displayHotels();
+    }, 1500);
+});
+
+document.getElementById('paymentModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+loadDiscountsFromStorage();
+initUser();
+displayHotels();
+initBurgerMenu();
+</script>
+</body>
+</html>
